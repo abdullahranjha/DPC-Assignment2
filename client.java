@@ -1,22 +1,38 @@
-// MultiplesOfTwoClient.java (Client Implementation)
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
-public class MultiplesOfTwoClient {
+public class MatrixMultiplicationClient {
+
     public static void main(String[] args) {
         try {
-            // Get the RMI registry and look up the MultiplesOfTwoService
+            // Connect to the RMI registry on localhost
             Registry registry = LocateRegistry.getRegistry("localhost", 1099);
-            MultiplesOfTwo stub = (MultiplesOfTwo) registry.lookup("MultiplesOfTwoService");
 
-            // Call the remote method and display results
-            int limit = 20; // You can change the limit to test different cases
-            int[] multiples = stub.generateMultiples(limit);
+            // Lookup the MatrixMultiplication service
+            MatrixMultiplication stub = (MatrixMultiplication) registry.lookup("MatrixMultiplicationService");
 
-            System.out.println("Multiples of 2 up to " + limit + ":");
-            for (int multiple : multiples) {
-                System.out.print(multiple + " ");
+            // Define two matrices to multiply (for simplicity, square matrices)
+            int[][] A = {
+                {1, 2},
+                {3, 4}
+            };
+            int[][] B = {
+                {5, 6},
+                {7, 8}
+            };
+
+            // Call the remote method to multiply the submatrices
+            int[][] result = stub.multiplySubmatrices(A, B);
+
+            // Print the result
+            System.out.println("Result matrix:");
+            for (int i = 0; i < result.length; i++) {
+                for (int j = 0; j < result[0].length; j++) {
+                    System.out.print(result[i][j] + " ");
+                }
+                System.out.println();
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
